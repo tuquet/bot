@@ -1,0 +1,19 @@
+# Node dependencies
+node_modules/
+
+# Environment secrets
+config/.env
+*.env.local
+
+# Runtime logs
+logs/*
+!logs/.gitkeep
+*.log
+
+# Application data
+data/*
+!data/.gitkeep
+
+# System & OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,11 @@
+{
+  "botName": "FlowupAI_bot",
+  "defaultRepo": "tuquet/tuquet.github.io",
+  "deployWorkflow": "deploy-pages.yml",
+  "websiteUrl": "https://tuquet.github.io/",
+  "monitoredServices": [
+    "nginx",
+    "minio",
+    "flowup-bot"
+  ]
+}

@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Flowup Bot CLI Management Tool
+# ==============================================================================
+set -e
+
+APP_DIR="/root/flowup-bot"
+SERVICE_NAME="flowup-bot"
+
+show_help() {
+  echo "Usage: flowup-bot [command]"
+  echo ""
+  echo "Commands:"
+  echo "  status       Check the status of flowup-bot daemon"
+  echo "  start        Start the flowup-bot daemon"
+  echo "  stop         Stop the flowup-bot daemon"
+  echo "  restart      Restart the flowup-bot daemon"
+  echo "  logs         Tail live runtime logs"
+  echo "  run          Run the bot in foreground (debug mode)"
+  echo "  help         Show this help message"
+  echo ""
+}
+
+case "$1" in
+  status)
+    systemctl status "$SERVICE_NAME" --no-pager || true
+    ;;
+  start)
+    echo "Starting $SERVICE_NAME..."
+    systemctl start "$SERVICE_NAME"
+    systemctl status "$SERVICE_NAME" --no-pager || true
+    ;;
+  stop)
+    echo "Stopping $SERVICE_NAME..."
+    systemctl stop "$SERVICE_NAME"
+    ;;
+  restart)
+    echo "Restarting $SERVICE_NAME..."
+    systemctl restart "$SERVICE_NAME"
+    systemctl status "$SERVICE_NAME" --no-pager || true
+    ;;
+  logs)
+    journalctl -u "$SERVICE_NAME" -f -n 50
+    ;;
+  run)
+    echo "Starting $SERVICE_NAME in foreground (Ctrl+C to stop)..."
+    cd "$APP_DIR" && node src/index.js
+    ;;
+  help|--help|-h|"")
+    show_help
+    ;;
+  *)
+    echo "Unknown command: $1"
+    show_help
+    exit 1
+    ;;
+esac

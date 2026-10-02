@@ -1,0 +1,77 @@
+import { test, describe } from 'node:test';
+import assert from 'node:assert/strict';
+import { getSystemStats, checkSiteHealth, checkServices } from '../src/services/system.js';
+import { getLatestRuns, listRepos, getFailedLogs } from '../src/services/github.js';
+import { isAdmin, isAllowedChat } from '../src/config.js';
+
+describe('System Service Tests', () => {
+  test('getSystemStats returns valid system metrics', async () => {
+    const stats = await getSystemStats();
+    assert.ok(stats.cpus > 0, 'CPU count should be greater than 0');
+    assert.ok(stats.loadAvg, 'Load average should be present');
+    assert.ok(stats.memory.includes('%'), 'Memory should contain percentage');
+    assert.ok(stats.disk, 'Disk info should be present');
+    assert.ok(stats.uptime, 'Uptime should be present');
+    assert.ok(stats.platform, 'Platform should be present');
+  });
+
+  test('checkSiteHealth pings website successfully with SSL', async () => {
+    const health = await checkSiteHealth('https://tuquet.github.io/');
+    assert.equal(health.status, 200, 'HTTP status should be 200');
+    assert.equal(health.isOk, true, 'Site health isOk should be true');
+    assert.ok(health.latency > 0, 'Latency should be measured');
+    assert.ok(typeof health.sslDays === 'number' && health.sslDays > 0, 'SSL days remaining should be positive');
+  });
+
+  test('checkServices detects active systemd services', async () => {
+    const results = await checkServices(['flowup-bot']);
+    assert.equal(results.length, 1);
+    assert.equal(results[0].name, 'flowup-bot');
+    assert.equal(results[0].status, 'active');
+    assert.equal(results[0].active, true);
+  });
+});
+
+describe('GitHub Service Tests', () => {
+  test('getLatestRuns fetches workflow runs from GitHub', async () => {
+    const runs = await getLatestRuns('tuquet/tuquet.github.io', 1);
+    assert.ok(Array.isArray(runs), 'Runs should be an array');
+    assert.ok(runs.length >= 1, 'Should return at least 1 run');
+    assert.ok(runs[0].databaseId, 'Database ID should be present');
+    assert.ok(runs[0].status, 'Status should be present');
+  });
+
+  test('listRepos fetches repositories for user tuquet', async () => {
+    const repos = await listRepos('tuquet', 3);
+    assert.ok(Array.isArray(repos), 'Repos should be an array');
+    assert.ok(repos.length > 0, 'Should return at least 1 repository');
+    assert.ok(repos[0].name, 'Repo should have a name');
+    assert.ok(repos[0].url, 'Repo should have a url');
+  });
+
+  test('getFailedLogs handles error log queries gracefully', async () => {
+    const result = await getFailedLogs('tuquet/tuquet.github.io');
+    assert.ok(typeof result.hasFailed === 'boolean');
+    if (!result.hasFailed) {
+      assert.ok(result.message);
+    } else {
+      assert.ok(result.logs);
+    }
+  });
+});
+
+describe('Config & Auth Tests', () => {
+  test('isAdmin accurately verifies admin user IDs', () => {
+    assert.equal(isAdmin('1038133235'), true, 'Tu Dinh ID should be admin');
+    assert.equal(isAdmin(1038133235), true, 'Number ID should also be valid');
+    assert.equal(isAdmin('999999999'), false, 'Random user should not be admin');
+    assert.equal(isAdmin(null), false, 'Null should not be admin');
+  });
+
+  test('isAllowedChat verifies whitelisted chat IDs', () => {
+    assert.equal(isAllowedChat('-5079028223'), true, 'Notification group should be allowed');
+    assert.equal(isAllowedChat(-5079028223), true, 'Number chat ID should also be valid');
+    assert.equal(isAllowedChat('1038133235'), true, 'Admin private chat should be allowed');
+    assert.equal(isAllowedChat('-999999999'), false, 'Non-whitelisted group should be denied');
+  });
+});
