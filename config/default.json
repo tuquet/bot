@@ -4,8 +4,8 @@
   "deployWorkflow": "deploy-pages.yml",
   "websiteUrl": "https://tuquet.github.io/",
   "monitoredServices": [
-    "nginx",
-    "minio",
-    "flowup-bot"
+    "flowup-bot",
+    "docker",
+    "ssh"
   ]
 }

@@ -21,8 +21,7 @@ let defaultConfig = {
   botName: 'FlowupAI_bot',
   defaultRepo: 'tuquet/tuquet.github.io',
   deployWorkflow: 'deploy-pages.yml',
-  websiteUrl: 'https://tuquet.github.io/',
-  monitoredServices: ['nginx', 'minio', 'flowup-bot']
+  monitoredServices: ['flowup-bot', 'docker', 'ssh']
 };
 
 if (fs.existsSync(configPath)) {
