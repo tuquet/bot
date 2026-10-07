@@ -1,0 +1,33 @@
+{
+  "botName": "FlowupAI_bot",
+  "defaultRepo": "tuquet/tuquet.github.io",
+  "deployWorkflow": "deploy-pages.yml",
+  "websiteUrl": "https://tuquet.github.io/",
+  "monitoredServices": [
+    "telegram-bot",
+    "docker",
+    "ssh"
+  ],
+  "releasesApiUrl": "https://tuquet.netlify.app/api/releases",
+  "releasesFeedUrl": "https://tuquet.netlify.app/feed.xml",
+  "releasePollMinutes": 5,
+  "monitoredRepos": [
+    "tuquet/automa",
+    "tuquet/browser",
+    "tuquet/claude-agy",
+    "tuquet/cli",
+    "tuquet/cloud",
+    "tuquet/software",
+    "tuquet/faker",
+    "tuquet/lib",
+    "tuquet/releases",
+    "tuquet/runner",
+    "tuquet/scoop-bucket",
+    "tuquet/skills",
+    "tuquet/tuquet",
+    "tuquet/bot",
+    "tuquet/tuquet.github.io",
+    "tuquet/yak-map"
+  ],
+  "ciPollMinutes": 3
+}

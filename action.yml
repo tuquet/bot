@@ -1,0 +1,110 @@
+name: 'Tuquet Telegram Notification'
+description: 'Unified Telegram notification for Tuquet GitHub Actions workflows'
+author: 'Tu Quet'
+inputs:
+  bot-token:
+    description: 'Telegram Bot Token'
+    required: true
+  chat-id:
+    description: 'Telegram Chat ID'
+    required: true
+  status:
+    description: 'Job or workflow status (success, failure, cancelled)'
+    required: false
+    default: 'success'
+  type:
+    description: 'Notification type (ci, release, deploy, custom)'
+    required: false
+    default: 'ci'
+  tag:
+    description: 'Release tag (when type is release)'
+    required: false
+    default: ''
+  message:
+    description: 'Custom message or details override'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Send Telegram Notification
+      shell: bash
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ inputs.bot-token }}
+        TELEGRAM_CHAT_ID: ${{ inputs.chat-id }}
+        JOB_STATUS: ${{ inputs.status }}
+        NOTIFY_TYPE: ${{ inputs.type }}
+        RELEASE_TAG: ${{ inputs.tag }}
+        CUSTOM_MSG: ${{ inputs.message }}
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        REPO: ${{ github.repository }}
+        WORKFLOW_NAME: ${{ github.workflow }}
+        BRANCH: ${{ github.ref_name }}
+        ACTOR: ${{ github.actor }}
+        RUN_ID: ${{ github.run_id }}
+        SERVER_URL: ${{ github.server_url }}
+        EVENT_NAME: ${{ github.event_name }}
+      run: |
+        if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+          echo "Telegram credentials not found, skipping notification."
+          exit 0
+        fi
+
+        if [ "$NOTIFY_TYPE" = "release" ]; then
+          TAG="${RELEASE_TAG:-$BRANCH}"
+          TEXT=$(printf "🚀 <b>New Release Published: %s</b>\n\n📦 <b>Repo:</b> <a href=\"%s/%s\">%s</a>\n🏷️ <b>Tag:</b> <code>%s</code>\n👤 <b>Publisher:</b> %s\n🔗 <a href=\"%s/%s/releases\">View Releases</a>" \
+            "$REPO" "$SERVER_URL" "$REPO" "$REPO" "$TAG" "$ACTOR" "$SERVER_URL" "$REPO")
+        elif [ "$NOTIFY_TYPE" = "deploy" ]; then
+          if [ "$JOB_STATUS" = "failure" ]; then
+            ICON="❌"
+            STATUS_TEXT="DEPLOY FAILED"
+          elif [ "$JOB_STATUS" = "cancelled" ]; then
+            ICON="⚠️"
+            STATUS_TEXT="DEPLOY CANCELLED"
+          else
+            ICON="🌐"
+            STATUS_TEXT="DEPLOY SUCCESS"
+          fi
+          TEXT=$(printf "%s <b>Deployment: %s</b>\n\n📦 <b>Repo:</b> <a href=\"%s/%s\">%s</a>\n🌿 <b>Branch:</b> <code>%s</code>\n👤 <b>Deployer:</b> %s\n🔗 <a href=\"%s/%s/actions/runs/%s\">View Run Details</a>" \
+            "$ICON" "$STATUS_TEXT" \
+            "$SERVER_URL" "$REPO" "$REPO" \
+            "$BRANCH" \
+            "$ACTOR" \
+            "$SERVER_URL" "$REPO" "$RUN_ID")
+        else
+          if [ "$JOB_STATUS" = "failure" ]; then
+            ICON="❌"
+            STATUS_TEXT="FAILED"
+          elif [ "$JOB_STATUS" = "cancelled" ]; then
+            ICON="⚠️"
+            STATUS_TEXT="CANCELLED"
+          else
+            ICON="✅"
+            STATUS_TEXT="SUCCESS"
+          fi
+
+          if [ -n "$CUSTOM_MSG" ]; then
+            CONTENT="$CUSTOM_MSG"
+          else
+            CONTENT=$(echo "$COMMIT_MESSAGE" | head -n 1 | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g')
+            if [ -z "$CONTENT" ]; then
+              CONTENT="Triggered by $EVENT_NAME"
+            fi
+          fi
+
+          TEXT=$(printf "%s <b>GitHub Actions: %s</b>\n\n📦 <b>Repo:</b> <a href=\"%s/%s\">%s</a>\n⚙️ <b>Workflow:</b> %s\n🌿 <b>Branch:</b> <code>%s</code>\n👤 <b>Author:</b> %s\n💬 <b>Details:</b> %s\n🔗 <a href=\"%s/%s/actions/runs/%s\">View Run Details</a>" \
+            "$ICON" "$STATUS_TEXT" \
+            "$SERVER_URL" "$REPO" "$REPO" \
+            "$WORKFLOW_NAME" \
+            "$BRANCH" \
+            "$ACTOR" \
+            "$CONTENT" \
+            "$SERVER_URL" "$REPO" "$RUN_ID")
+        fi
+
+        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+          -d "chat_id=${TELEGRAM_CHAT_ID}" \
+          --data-urlencode "text=${TEXT}" \
+          -d "parse_mode=HTML" \
+          -d "disable_web_page_preview=true" > /dev/null || true
