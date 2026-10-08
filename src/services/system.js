@@ -141,7 +141,12 @@ export async function checkSiteHealth(targetUrl = config.websiteUrl) {
  */
 export async function checkServices(serviceList = config.monitoredServices) {
   const results = [];
+  const safeNameRegex = /^[a-zA-Z0-9_\-\.@]+$/;
   for (const name of serviceList) {
+    if (!name || typeof name !== 'string' || !safeNameRegex.test(name)) {
+      results.push({ name: String(name), status: 'invalid_name', active: false });
+      continue;
+    }
     try {
       const { stdout } = await execAsync(`systemctl is-active ${name} || true`);
       const status = stdout.trim();

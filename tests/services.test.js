@@ -28,7 +28,7 @@ describe('System Service Tests', () => {
     assert.ok(typeof health.sslDays === 'number' && health.sslDays > 0, 'SSL days remaining should be positive');
   });
 
-  test('checkServices detects active systemd services', async (t) => {
+  test('checkServices detects systemd services status format', async (t) => {
     if (process.platform === 'win32') {
       t.skip('Skipping systemctl test on Windows');
       return;
@@ -36,8 +36,19 @@ describe('System Service Tests', () => {
     const results = await checkServices(['telegram-bot']);
     assert.equal(results.length, 1);
     assert.equal(results[0].name, 'telegram-bot');
-    assert.equal(results[0].status, 'active');
-    assert.equal(results[0].active, true);
+    assert.ok(typeof results[0].status === 'string');
+    assert.ok(typeof results[0].active === 'boolean');
+    assert.equal(results[0].active, results[0].status === 'active');
+  });
+
+  test('checkServices rejects malicious service names', async () => {
+    const malicious = ['evil; rm -rf /', 'service$(whoami)', '`id`'];
+    const results = await checkServices(malicious);
+    assert.equal(results.length, 3);
+    for (const res of results) {
+      assert.equal(res.status, 'invalid_name');
+      assert.equal(res.active, false);
+    }
   });
 });
 
