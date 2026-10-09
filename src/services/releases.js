@@ -8,31 +8,33 @@ const STATE_FILE = path.join(config.dataDir, 'last_release.json');
  * Fetch latest releases from Netlify API or fallback to RSS Feed
  */
 export async function getLatestReleases(limit = 5) {
-  // Strategy 1: Try structured API
-  try {
-    const res = await fetch(config.releasesApiUrl, {
-      headers: { 'User-Agent': 'FlowupAI-Bot/1.0' },
-      signal: AbortSignal.timeout(10000),
-    });
+  // Strategy 1: Try structured API (primary then Netlify direct fallback)
+  for (const apiUrl of [config.releasesApiUrl, 'https://tuquet.netlify.app/api/releases']) {
+    try {
+      const res = await fetch(apiUrl, {
+        headers: { 'User-Agent': 'FlowupAI-Bot/1.0' },
+        signal: AbortSignal.timeout(5000),
+      });
 
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data.infos)) {
-        return data.infos
-          .filter(item => item.version)
-          .slice(0, limit)
-          .map(item => ({
-            id: item.id || `release:${item.repo}@${item.version}`,
-            repo: item.repo || 'unknown',
-            version: item.version,
-            title: item.title || `${item.repo} ${item.version}`,
-            url: item.commit || `https://github.com/${item.repo}/releases/tag/v${item.version}`,
-            createdAt: item.created_at ? new Date(item.created_at).toISOString() : new Date().toISOString(),
-          }));
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.infos)) {
+          return data.infos
+            .filter(item => item.version)
+            .slice(0, limit)
+            .map(item => ({
+              id: item.id || `release:${item.repo}@${item.version}`,
+              repo: item.repo || 'unknown',
+              version: item.version,
+              title: item.title || `${item.repo} ${item.version}`,
+              url: item.commit || `https://github.com/${item.repo}/releases/tag/v${item.version}`,
+              createdAt: item.created_at ? new Date(item.created_at).toISOString() : new Date().toISOString(),
+            }));
+        }
       }
+    } catch (err) {
+      // Continue to fallback
     }
-  } catch (err) {
-    console.warn('[Releases] API fetch failed, falling back to RSS feed:', err.message);
   }
 
   // Strategy 2: Fallback to RSS feed XML
@@ -172,12 +174,12 @@ export async function checkForNewReleases(bot) {
 }
 
 /**
- * Check for new blog posts on tuquet.github.io/feed.xml and broadcast to Telegram
+ * Check for new blog posts on tuquet.com/feed.xml and broadcast to Telegram
  */
 export async function checkForNewBlogPosts(bot) {
   const BLOG_STATE_FILE = path.join(config.dataDir, 'last_blog_post.json');
   try {
-    const res = await fetch('https://tuquet.github.io/feed.xml', {
+    const res = await fetch('https://tuquet.com/feed.xml', {
       headers: { 'User-Agent': 'FlowupAI-Bot/1.0' },
       signal: AbortSignal.timeout(10000),
     });
@@ -196,7 +198,7 @@ export async function checkForNewBlogPosts(bot) {
       const descMatch = itemXml.match(/<description><!\[CDATA\[(.*?)\]\]><\/description>/) || itemXml.match(/<description>(.*?)<\/description>/);
 
       const title = titleMatch ? titleMatch[1].trim() : 'Bài viết mới';
-      const link = linkMatch ? linkMatch[1].trim() : 'https://tuquet.github.io/posts';
+      const link = linkMatch ? linkMatch[1].trim() : 'https://tuquet.com/posts';
       const guid = guidMatch ? guidMatch[1].trim() : link;
       const desc = descMatch ? descMatch[1].trim() : '';
 
@@ -238,7 +240,7 @@ export async function checkForNewBlogPosts(bot) {
         ``,
         `<i>${escapeHtml(post.desc)}</i>`,
         ``,
-        `🔗 <a href="${escapeHtml(post.link)}">Đọc bài viết trên tuquet.github.io</a>`,
+        `🔗 <a href="${escapeHtml(post.link)}">Đọc bài viết trên tuquet.com</a>`,
       ].join('\n');
 
       for (const chatId of targetChats) {

@@ -161,13 +161,13 @@ export async function formatReleasesMessage() {
 
   const text = [
     `<b>📦 Danh Sách Releases Gần Đây:</b>`,
-    `📡 <i>Nguồn: <a href="${escapeHtml(config.releasesFeedUrl)}">tuquet.netlify.app/feed.xml</a></i>`,
+    `📡 <i>Nguồn: <a href="${escapeHtml(config.releasesFeedUrl)}">release.tuquet.com/feed.xml</a></i>`,
     ``,
     lines.join('\n\n')
   ].join('\n');
 
   const keyboard = new InlineKeyboard()
-    .url('🌐 Mở Releases Portal', 'https://tuquet.netlify.app/')
+    .url('🌐 Mở Releases Portal', 'https://release.tuquet.com/')
     .text('🔄 Làm mới', 'action:releases')
     .row()
     .text('🔙 Menu chính', 'action:help');

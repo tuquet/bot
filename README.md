@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://tuquet.github.io/icons/telegram-bot.svg" width="76" height="76" alt="Tuquet ChatOps Logo" />
+  <img src="https://tuquet.com/icons/telegram-bot.svg" width="76" height="76" alt="Tuquet ChatOps Logo" />
   <h1>Tuquet ChatOps</h1>
   <p><strong>Telegram ChatOps &amp; Infrastructure Server Health Daemon</strong></p>
 

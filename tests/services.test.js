@@ -21,7 +21,7 @@ describe('System Service Tests', () => {
   });
 
   test('checkSiteHealth pings website successfully with SSL', async () => {
-    const health = await checkSiteHealth('https://tuquet.github.io/');
+    const health = await checkSiteHealth('https://tuquet.com/');
     assert.equal(health.status, 200, 'HTTP status should be 200');
     assert.equal(health.isOk, true, 'Site health isOk should be true');
     assert.ok(health.latency > 0, 'Latency should be measured');

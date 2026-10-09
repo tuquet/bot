@@ -2,14 +2,14 @@
   "botName": "FlowupAI_bot",
   "defaultRepo": "tuquet/tuquet.github.io",
   "deployWorkflow": "deploy-pages.yml",
-  "websiteUrl": "https://tuquet.github.io/",
+  "websiteUrl": "https://tuquet.com/",
   "monitoredServices": [
     "telegram-bot",
     "docker",
     "ssh"
   ],
-  "releasesApiUrl": "https://tuquet.netlify.app/api/releases",
-  "releasesFeedUrl": "https://tuquet.netlify.app/feed.xml",
+  "releasesApiUrl": "https://release.tuquet.com/api/releases",
+  "releasesFeedUrl": "https://release.tuquet.com/feed.xml",
   "releasePollMinutes": 5,
   "monitoredRepos": [
     "tuquet/automa",
