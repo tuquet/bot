@@ -1,6 +1,6 @@
 {
   "botName": "FlowupAI_bot",
-  "defaultRepo": "tuquet/tuquet.github.io",
+  "defaultRepo": "tuquet/tuquet.com",
   "deployWorkflow": "deploy-pages.yml",
   "websiteUrl": "https://tuquet.com/",
   "monitoredServices": [
@@ -26,7 +26,7 @@
     "tuquet/skills",
     "tuquet/tuquet",
     "tuquet/bot",
-    "tuquet/tuquet.github.io",
+    "tuquet/tuquet.com",
     "tuquet/yak-map"
   ],
   "ciPollMinutes": 3

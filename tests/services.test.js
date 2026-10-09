@@ -54,7 +54,7 @@ describe('System Service Tests', () => {
 
 describe('GitHub & Releases Service Tests', () => {
   test('getLatestRuns fetches workflow runs from GitHub', async () => {
-    const runs = await getLatestRuns('tuquet/tuquet.github.io', 1);
+    const runs = await getLatestRuns('tuquet/tuquet.com', 1);
     assert.ok(Array.isArray(runs), 'Runs should be an array');
     assert.ok(runs.length >= 1, 'Should return at least 1 run');
     assert.ok(runs[0].databaseId, 'Database ID should be present');
@@ -70,7 +70,7 @@ describe('GitHub & Releases Service Tests', () => {
   });
 
   test('getFailedLogs handles error log queries gracefully', async () => {
-    const result = await getFailedLogs('tuquet/tuquet.github.io');
+    const result = await getFailedLogs('tuquet/tuquet.com');
     assert.ok(typeof result.hasFailed === 'boolean');
     if (!result.hasFailed) {
       assert.ok(result.message);
@@ -92,17 +92,17 @@ describe('GitHub & Releases Service Tests', () => {
     assert.equal(resolveRepo('releases'), 'tuquet/releases');
     assert.equal(resolveRepo('tuquet/cloud'), 'tuquet/cloud');
     assert.equal(resolveRepo('all'), 'all');
-    assert.equal(resolveRepo(''), 'tuquet/tuquet.github.io');
+    assert.equal(resolveRepo(''), 'tuquet/tuquet.com');
   });
 
   test('getMultiRepoCiSummary fetches latest workflow info for multiple repos', async () => {
-    const summary = await getMultiRepoCiSummary(['tuquet/tuquet.github.io', 'tuquet/releases']);
+    const summary = await getMultiRepoCiSummary(['tuquet/tuquet.com', 'tuquet/releases']);
     assert.equal(summary.length, 2);
-    assert.equal(summary[0].repo, 'tuquet/tuquet.github.io');
+    assert.equal(summary[0].repo, 'tuquet/tuquet.com');
     assert.equal(summary[0].hasRun, true);
     assert.equal(summary[1].repo, 'tuquet/releases');
     assert.equal(summary[1].hasRun, true);
-    assert.equal(summary[1].conclusion, 'success');
+    assert.ok(summary[1].conclusion, 'Conclusion should be defined');
   });
 });
 

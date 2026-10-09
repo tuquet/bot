@@ -19,7 +19,7 @@ if (fs.existsSync(envPath)) {
 const configPath = path.join(rootDir, 'config', 'default.json');
 let defaultConfig = {
   botName: 'FlowupAI_bot',
-  defaultRepo: 'tuquet/tuquet.github.io',
+  defaultRepo: 'tuquet/tuquet.com',
   deployWorkflow: 'deploy-pages.yml',
   monitoredServices: ['telegram-bot', 'docker', 'ssh']
 };

@@ -439,7 +439,7 @@ async function start() {
         console.log('[Bot] CI background polling disabled (using event-driven tuquet/bot@main).');
       }
 
-      // Initialize blog feed monitor for tuquet.github.io
+      // Initialize blog feed monitor for tuquet.com
       checkForNewBlogPosts(bot);
       const blogIntervalMs = 60 * 1000;
       setInterval(() => {

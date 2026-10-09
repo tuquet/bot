@@ -246,7 +246,7 @@ export async function checkForCiUpdates(bot) {
 
         // Condition 3: Deploy or successful build on website / release workflows
         if (currentConclusion === 'success' && isNewRun && !wasFailure) {
-          if (item.repo === 'tuquet/tuquet.github.io' || item.workflowName.toLowerCase().includes('deploy') || item.workflowName.toLowerCase().includes('release')) {
+          if (item.repo === 'tuquet/tuquet.com' || item.repo === 'tuquet/tuquet.github.io' || item.workflowName.toLowerCase().includes('deploy') || item.workflowName.toLowerCase().includes('release')) {
             console.log(`[CI Monitor] Detected successful deploy/run on ${item.repo}`);
             const msg = [
               `🚀 <b>BUILD & DEPLOY THÀNH CÔNG: <code>${item.repo}</code></b>`,
