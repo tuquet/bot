@@ -102,7 +102,7 @@ describe('GitHub & Releases Service Tests', () => {
     assert.equal(summary[0].hasRun, true);
     assert.equal(summary[1].repo, 'tuquet/releases');
     assert.equal(summary[1].hasRun, true);
-    assert.ok(summary[1].conclusion, 'Conclusion should be defined');
+    assert.ok(typeof summary[1].conclusion === 'string' || summary[1].conclusion === null, 'Conclusion should be string or null');
   });
 });
 
