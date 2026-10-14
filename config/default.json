@@ -22,7 +22,6 @@
     "tuquet/lib",
     "tuquet/releases",
     "tuquet/runner",
-    "tuquet/scoop-bucket",
     "tuquet/skills",
     "tuquet/tuquet",
     "tuquet/bot",
