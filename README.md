@@ -15,7 +15,7 @@
 ## 1. Cấu Trúc Ứng Dụng
 
 ```text
-bot/  # (e.g. ~/.specter/bot/ on local workstation or /opt/tuquet/bot/ on Linux server)
+bot/  # (e.g. ~/.tuquet/bot/ on local workstation or /opt/tuquet/bot/ on Linux server)
 ├── bin/
 │   └── telegram-bot      # CLI quản lý và điều khiển daemon
 ├── config/
@@ -41,7 +41,7 @@ bot/  # (e.g. ~/.specter/bot/ on local workstation or /opt/tuquet/bot/ on Linux 
 
 ## 2. Quản Trị Hệ Thống Qua CLI
 
-Tuquet ChatOps daemon được điều khiển qua binary `telegram-bot` (liên kết toàn cục qua `/usr/local/bin/telegram-bot` trên Linux hoặc nằm trong `PATH` hệ sinh thái `~/.specter/bot/bin/`). Bạn có thể chạy các lệnh quản trị từ bất kỳ đâu:
+Tuquet ChatOps daemon được điều khiển qua binary `telegram-bot` (liên kết toàn cục qua `/usr/local/bin/telegram-bot` trên Linux hoặc nằm trong `PATH` hệ sinh thái `~/.tuquet/bot/bin/`). Bạn có thể chạy các lệnh quản trị từ bất kỳ đâu:
 
 ```bash
 # Kiểm tra trạng thái daemon
@@ -80,7 +80,7 @@ telegram-bot run
 
 ## 4. Bảo Mật & Phân Quyền
 
-- Cấu hình file `config/.env` (hoặc `~/.specter/bot/config/.env`):
+- Cấu hình file `config/.env` (hoặc `~/.tuquet/bot/config/.env`):
   - `ALLOWED_CHAT_IDS`: Chỉ nhóm chat hoặc ID người dùng được phép mới có thể tương tác với bot.
   - `ADMIN_USER_IDS`: Chỉ tài khoản admin được cấu hình (ví dụ: `ADMIN_USER_IDS="<your_telegram_id>"`) mới có thể chạy các lệnh nhạy cảm như `/deploy`, `/server`, `/services`.
 
