@@ -1,16 +1,7 @@
 {
-  "name": "tuquet-bot",
+  "name": "@tuquet/bot",
   "version": "1.0.0",
   "description": "Telegram ChatOps and Server Monitoring assistant daemon for GitHub Actions and Linux VPS",
-  "type": "module",
-  "main": "src/index.js",
-  "bin": {
-    "telegram-bot": "./bin/telegram-bot"
-  },
-  "scripts": {
-    "start": "node src/index.js",
-    "test": "node --test tests/services.test.js"
-  },
   "keywords": [
     "telegram",
     "bot",
@@ -19,8 +10,29 @@
     "monitoring",
     "github-actions"
   ],
-  "author": "Tu Quet",
-  "license": "ISC",
+  "homepage": "https://github.com/tuquet/bot#readme",
+  "bugs": {
+    "url": "https://github.com/tuquet/bot/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuquet/bot.git"
+  },
+  "license": "MIT",
+  "author": "Tuquet Team <dev@tuquet.com>",
+  "type": "module",
+  "engines": {
+    "node": ">=20.18.0",
+    "pnpm": ">=9.0.0"
+  },
+  "main": "src/index.js",
+  "bin": {
+    "telegram-bot": "./bin/telegram-bot"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test tests/services.test.js"
+  },
   "dependencies": {
     "dotenv": "^18.0.5",
     "grammy": "^1.46.0"

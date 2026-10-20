@@ -1,10 +1,10 @@
 <div align="center">
-  <img src="https://tuquet.com/icons/telegram-bot.svg" width="76" height="76" alt="Tuquet ChatOps Logo" />
-  <h1>Tuquet ChatOps</h1>
+  <img src="https://tuquet.com/icons/telegram-bot.svg" width="76" height="76" alt="ChatOps Logo" />
+  <h1>ChatOps</h1>
   <p><strong>Telegram ChatOps &amp; Infrastructure Server Health Daemon</strong></p>
 
   <p>
-    <img src="https://img.shields.io/badge/Tuquet-ChatOps-blue.svg?logo=telegram" alt="Tuquet ChatOps" />
+    <img src="https://img.shields.io/badge/Tuquet-ChatOps-blue.svg?logo=telegram" alt="ChatOps" />
     <img src="https://img.shields.io/badge/Runtime-Node.js-green.svg" alt="Node.js" />
     <img src="https://img.shields.io/badge/Role-DevOps%20ChatOps-cyan.svg" alt="DevOps ChatOps" />
   </p>
@@ -41,7 +41,7 @@ bot/  # (e.g. ~/.tuquet/bot/ on local workstation or /opt/tuquet/bot/ on Linux s
 
 ## 2. Quản Trị Hệ Thống Qua CLI
 
-Tuquet ChatOps daemon được điều khiển qua binary `telegram-bot` (liên kết toàn cục qua `/usr/local/bin/telegram-bot` trên Linux hoặc nằm trong `PATH` hệ sinh thái `~/.tuquet/bot/bin/`). Bạn có thể chạy các lệnh quản trị từ bất kỳ đâu:
+ChatOps daemon được điều khiển qua binary `telegram-bot` (liên kết toàn cục qua `/usr/local/bin/telegram-bot` trên Linux hoặc nằm trong `PATH` hệ sinh thái `~/.tuquet/bot/bin/`). Bạn có thể chạy các lệnh quản trị từ bất kỳ đâu:
 
 ```bash
 # Kiểm tra trạng thái daemon
@@ -74,7 +74,7 @@ telegram-bot run
 | `/site` | Kiểm tra HTTP Status, độ trễ và hạn chứng chỉ SSL của website | Tất cả |
 | `/server` hoặc `/sys` | Xem thông số CPU load, RAM, Ổ cứng và Uptime của VPS | **Admin Only** |
 | `/services` | Xem trạng thái các dịch vụ hệ thống (Docker, SSH, telegram-bot) | **Admin Only** |
-| `/repos` | Xem danh sách 14 repositories độc lập của hệ sinh thái Tuquet | Tất cả |
+| `/repos` | Xem danh sách 14 repositories độc lập của hệ sinh thái | Tất cả |
 
 ---
 
@@ -88,7 +88,7 @@ telegram-bot run
 
 ## 5. Reusable GitHub Actions Composite Action
 
-Tuquet ChatOps cung cấp Composite Action chính chủ dùng chung cho toàn bộ ecosystem Tuquet (14 repositories độc lập), giúp loại bỏ hoàn toàn mã lặp (DRY) trong các file workflow:
+ChatOps cung cấp Composite Action chính chủ dùng chung cho toàn bộ ecosystem (14 repositories độc lập), giúp loại bỏ hoàn toàn mã lặp (DRY) trong các file workflow:
 
 ```yaml
 - name: Send Telegram Notification

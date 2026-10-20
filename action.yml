@@ -1,5 +1,5 @@
-name: 'Tuquet Telegram Notification'
-description: 'Unified Telegram notification for Tuquet GitHub Actions workflows'
+name: 'Telegram Notification'
+description: 'Unified Telegram notification for GitHub Actions workflows'
 author: 'Tu Quet'
 inputs:
   bot-token:

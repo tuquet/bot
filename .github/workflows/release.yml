@@ -31,7 +31,7 @@ jobs:
           fi
           echo "RELEASE_TAG=$TAG" >> $GITHUB_ENV
           VERSION="${TAG#v}"
-          echo "TAR_NAME=tuquet-bot-v${VERSION}.tar.gz" >> $GITHUB_ENV
+          echo "TAR_NAME=bot-v${VERSION}.tar.gz" >> $GITHUB_ENV
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
