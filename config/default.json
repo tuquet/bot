@@ -12,7 +12,7 @@
   "releasesFeedUrl": "https://release.tuquet.com/feed.xml",
   "releasePollMinutes": 5,
   "monitoredRepos": [
-    "tuquet/automa",
+    "tuquet/automation",
     "tuquet/browser",
     "tuquet/claude-agy",
     "tuquet/cli",
